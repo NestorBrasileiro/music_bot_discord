@@ -1,17 +1,22 @@
-import { verifyKey } from 'discord-interactions';
-import express, { NextFunction, Router, Request, Response } from "express";
+import { InteractionResponseType, InteractionType, verifyKeyMiddleware } from "discord-interactions";
+import express, { Router } from "express";
 import { DiscordMiddleware } from "./utils/DiscordVerifications.middleware";
 
 const router: Router = Router()
-const discordMiddleware = new DiscordMiddleware()
 
-const routes: Array<string> = [
-    '/about',
-    '/actions',
+const postRoutes: Array<string> = [
+    '/interactions',
+    '/terms-of-service',
     '/help'
 ]
 
-router.use(routes, express.json( { verify: discordMiddleware.verifyRequest } ) )
+router.post(postRoutes, (request, response, next) => {
+
+    response.send({
+        type: InteractionResponseType.PONG
+    })
+    
+})
 
 export { router }
 

@@ -22,11 +22,17 @@ export class DiscordMiddleware {
     
             const timestamp: string = request.headers[DISCORD_HEADERS["X-Signature-Timestamp"]] as string;
 
+            console.log(signature, timestamp)
+
             if(signature && timestamp){
-                const isValidRequest: boolean = await verifyKey(buffer, signature, timestamp, key);
+                const isValidRequest: boolean = verifyKey(buffer, signature, timestamp, key);
                 console.log(isValidRequest)
                 if(isValidRequest){
-                    return;
+                    response.statusCode = 201
+                    response.statusMessage = "Created"
+                    response.end({
+                        authenticated: true
+                    })
                 }
 
             }
